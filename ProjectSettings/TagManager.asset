@@ -3,20 +3,22 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Ground
+  - Platform
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Enemy
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Platform
+  - Player
+  - PlayerAttack
+  - PlatformDetection
+  - PlayerDetection
+  - EnemyProjectile
   - 
   - 
   - 
@@ -40,4 +42,22 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: BackGroundEnv
+    uniqueID: 3042648023
+    locked: 0
+  - name: Fog
+    uniqueID: 984037541
+    locked: 0
+  - name: Enviroment
+    uniqueID: 1713512221
+    locked: 0
+  - name: Platform
+    uniqueID: 4116761107
+    locked: 0
+  - name: Objects
+    uniqueID: 1894291905
+    locked: 0
+  - name: "\u0421haracter"
+    uniqueID: 2227971519
     locked: 0
