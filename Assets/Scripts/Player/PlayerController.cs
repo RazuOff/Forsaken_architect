@@ -4,13 +4,14 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
   [SerializeField] LayerMask platformLayerMask;
-  [SerializeField] private float jumpForce, moveSpeed, heightOfCheckForJump = 1f, basicRangeAttackSpeed = 1f;
-  [SerializeField] private GameObject attackProjectile;
+  [SerializeField] private float jumpForce, moveSpeed, rockCreateCooldown , heightOfCheckForJump = 1f;
+  [SerializeField] private GameObject attackProjectile, rockToCreate;
+  [SerializeField] private Transform creatingPointTransform ;
   [SerializeField] private Animator animator;
-
+  private float rockCreateCooldownCount = 0f;
   private Rigidbody2D rb;
   private BoxCollider2D boxCollider2D;
-  private bool _isGrounded = true, facingRight = true, _isMoving = false;
+  private bool _isGrounded = true, facingRight = true, _isMoving = false, canCreateRock = true;
   public bool IsGrounded
   {
     get { return _isGrounded; }
@@ -38,11 +39,6 @@ public class PlayerController : MonoBehaviour
     }
   }
 
-  
- 
-
-
-
   private void Awake()
   {
     rb = GetComponent<Rigidbody2D>();
@@ -55,12 +51,25 @@ public class PlayerController : MonoBehaviour
     InputController.onInputMove += Move;
     InputController.onInputJump += Jump;
     InputController.onInputShoot += Shoot;
+    InputController.onInputCreateRock += CreateRock;
+
   }
   private void OnDisable()
   {
     InputController.onInputMove -= Move;
     InputController.onInputJump -= Jump;
     InputController.onInputShoot -= Shoot;
+    InputController.onInputCreateRock -= CreateRock;
+  }
+  private void Update()
+  {
+    rockCreateCooldownCount += Time.deltaTime;
+    if(rockCreateCooldownCount >= rockCreateCooldown)
+    {
+      canCreateRock = true;
+      rockCreateCooldownCount = 0;
+    }
+    
   }
 
   private void FixedUpdate()
@@ -112,7 +121,14 @@ public class PlayerController : MonoBehaviour
     if (IsGrounded)
      animator.SetTrigger("DistanceAttack");
   }
-
+  private void CreateRock()
+  {
+    if (canCreateRock)
+    {
+      Instantiate(rockToCreate, creatingPointTransform.position, Quaternion.identity);
+      canCreateRock = false;
+    }
+  }
 
   private void Flip()
   {

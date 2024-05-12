@@ -8,8 +8,8 @@ public class InputController : MonoBehaviour
   private bool[] stickDownLast;
 
   public static Action<float> onInputMove;
-  public static Action onInputJump;
-  public static Action onInputShoot;
+  public static Action onInputJump, onInputShoot, onInputCreateRock;
+ 
 
 
   private void Awake()
@@ -20,14 +20,29 @@ public class InputController : MonoBehaviour
   {
     MovementInput();
     JumpInput();
+    
+    
+  }
+
+  private void Update()
+  {
     ShootInput();
+    CreateRockInput();
   }
 
   private void JumpInput()
   {
     if (Input.GetAxisRaw("Jump") > 0)
     {
-      onInputJump?.Invoke();
+      if (!stickDownLast[1])
+      {
+        onInputJump?.Invoke();
+        stickDownLast[1] = true;
+      }
+    }
+    else
+    {
+      stickDownLast[1] = false;
     }
   }
 
@@ -36,7 +51,13 @@ public class InputController : MonoBehaviour
     float axis = Input.GetAxisRaw("Horizontal");
     onInputMove?.Invoke(axis);
   }
-
+  private void CreateRockInput()
+  {
+    if (Input.GetKeyDown(KeyCode.E))
+    {
+      onInputCreateRock.Invoke();
+    }
+  }
   private void ShootInput()
   {
     if (Input.GetAxisRaw("Fire1") > 0)
@@ -52,10 +73,5 @@ public class InputController : MonoBehaviour
     {
       stickDownLast[0] = false;
     }
-
-
-
-
-
   }
 }

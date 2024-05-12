@@ -12,7 +12,7 @@ public abstract class EnemyController : MonoBehaviour
   protected Animator animator;
   private RaycastHit2D[] groundHits = new RaycastHit2D[5];
   private CapsuleCollider2D capsuleCollider;
-  private float direction = -1f;
+  protected float direction = -1f;
 
   private Rigidbody2D rb;
   private bool _isMoving;
@@ -78,6 +78,7 @@ public abstract class EnemyController : MonoBehaviour
   }
   public virtual void Attack()
   {
+    animator.SetBool("CanMove", false);
     animator.SetTrigger("Attack");
   }
   protected void ChangeDirection()
