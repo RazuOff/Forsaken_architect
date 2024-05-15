@@ -5,11 +5,16 @@ using UnityEngine.Events;
 
 public class CorruptedSprite : MonoBehaviour
 {
-  [SerializeField] PlayerBasicDistanceAttack player;
-
+  [SerializeField] PlayerBasicDistanceAttack playerAttack;
+  [SerializeField] GameObject player;
   public void OnAnimatePerformAttack()
   {
-    player.SpawnProjectile();
+    playerAttack.SpawnProjectile();
+  }
+
+  public void OnDeath()
+  {
+    Destroy(player);
   }
 
 }

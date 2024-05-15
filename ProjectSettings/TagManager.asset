@@ -21,7 +21,7 @@ TagManager:
   - PlayerDetection
   - EnemyProjectile
   - BulletCollide
-  - 
+  - CameraStopper
   - 
   - 
   - 

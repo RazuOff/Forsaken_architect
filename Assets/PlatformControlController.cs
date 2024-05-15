@@ -7,6 +7,7 @@ public class PlatformControlController : MonoBehaviour
   private Rigidbody2D selectedRb;
   private Vector3 offset, mouseForce, lastPosition, mousePosition;
   [SerializeField] private float maxSpeed;
+  [SerializeField] private LayerMask checkObjectMask;
 
 
   // Start is called before the first frame update
@@ -29,7 +30,7 @@ public class PlatformControlController : MonoBehaviour
     {
       mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
       Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-      RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity);
+      RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity,checkObjectMask);
       if (hit.rigidbody != null && hit.collider.gameObject.CompareTag("Movable"))
       {
         selectedRb = hit.rigidbody;

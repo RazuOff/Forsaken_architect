@@ -43,17 +43,21 @@ public class UIPlayerHealth : MonoBehaviour
 
     for (int i = currentHealth - 1; i >= currentHealth - damage; i--)
     {
+      if(i >= 0) 
+      {       
+        break; 
+      }
       healthList[i].GetComponent<Animator>().SetTrigger("Destroy");
       
     }
     currentHealth -= damage;
 
+
   }
 
 
   private void SetupUI(int currentHealth)
-  {
-    Debug.Log(currentHealth);
+  {    
     for (int i = 0; i < currentHealth; i++)
     {
       healthList[i].SetActive(true);

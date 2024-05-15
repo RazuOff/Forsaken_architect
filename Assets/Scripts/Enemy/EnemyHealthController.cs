@@ -5,6 +5,12 @@ using UnityEngine;
 public class EnemyHealthController : MonoBehaviour, IHealthController
 {
   [SerializeField] private float health;
+  private Animator animator;
+  [SerializeField] private float scoreCost;
+  private void Awake()
+  {
+    animator = GetComponent<Animator>();
+  }
   public void Heal(float healAmount)
   {
     
@@ -13,6 +19,7 @@ public class EnemyHealthController : MonoBehaviour, IHealthController
   public void TakeDamage(float damage)
   {
     health -= damage;
+    animator.SetTrigger("Hit");
     if (health <= 0)
     {
       Death();
@@ -22,7 +29,11 @@ public class EnemyHealthController : MonoBehaviour, IHealthController
   private void Death()
   {
     Destroy(gameObject);
+
   }
 
-
+  private void OnDestroy()
+  {
+    UIController.instance.ChangeScore(scoreCost);
+  }
 }

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3072384375627477536}
   - component: {fileID: 4670108068542900056}
-  - component: {fileID: 4095612815033942639}
+  - component: {fileID: 6603726447164957048}
   m_Layer: 10
   m_Name: PlayerDetectionZone
   m_TagString: Untagged
@@ -67,8 +67,8 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   detectedColliders: []
---- !u!58 &4095612815033942639
-CircleCollider2D:
+--- !u!70 &6603726447164957048
+CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -99,9 +99,9 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 6.84
+  m_Offset: {x: 0.8945281, y: -0.061748926}
+  m_Size: {x: 28.894754, y: 1.9270657}
+  m_Direction: 1
 --- !u!1 &6167626597325689484
 GameObject:
   m_ObjectHideFlags: 0
@@ -304,7 +304,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a49c8e81f007adf46ab2a093d3acb091, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isTrigger: 1
   damage: 1
+  knockBack: 1
+  knockBackForce: 10
 --- !u!1 &8079271337783803827
 GameObject:
   m_ObjectHideFlags: 0
@@ -544,6 +547,7 @@ GameObject:
   - component: {fileID: 7169290771712500080}
   - component: {fileID: 925791570198795388}
   - component: {fileID: 4418523347803875880}
+  - component: {fileID: 2884966290273820429}
   m_Layer: 3
   m_Name: CloseEnemy
   m_TagString: Untagged
@@ -684,6 +688,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 5
+  scoreCost: 10
 --- !u!70 &925791570198795388
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -747,8 +752,24 @@ MonoBehaviour:
     maxNormalAngle: 0
   groundDistance: 0.5
   movementSpeed: 3
-  player: {fileID: 450744944947058410, guid: 81e51c923e6cb6346932c191f0ec1a03, type: 3}
+  player: {fileID: 0}
   hidePlayerMask:
     serializedVersion: 2
     m_Bits: 192
   attack: {fileID: 6711967658801306205}
+--- !u!114 &2884966290273820429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9213873464657367191}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a49c8e81f007adf46ab2a093d3acb091, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isTrigger: 0
+  damage: 2
+  knockBack: 1
+  knockBackForce: 30

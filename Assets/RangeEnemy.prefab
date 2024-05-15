@@ -241,6 +241,7 @@ GameObject:
   - component: {fileID: 3269475130321908622}
   - component: {fileID: 4456798944607902111}
   - component: {fileID: 4119724093069239380}
+  - component: {fileID: 8223280109324226570}
   m_Layer: 3
   m_Name: RangeEnemy
   m_TagString: Untagged
@@ -448,6 +449,22 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 192
   player: {fileID: 0}
+--- !u!114 &8223280109324226570
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2790313483664300460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a49c8e81f007adf46ab2a093d3acb091, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isTrigger: 0
+  damage: 2
+  knockBack: 1
+  knockBackForce: 30
 --- !u!1 &3815435476645653817
 GameObject:
   m_ObjectHideFlags: 0

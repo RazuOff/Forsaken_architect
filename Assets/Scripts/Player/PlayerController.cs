@@ -1,16 +1,19 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
   [SerializeField] LayerMask platformLayerMask;
-  [SerializeField] private float jumpForce, moveSpeed, rockCreateCooldown , heightOfCheckForJump = 1f;
+  [SerializeField] private float jumpForce, moveSpeed, rockCreateCooldown , heightOfCheckForJump = 1f, knockBackDuration;
   [SerializeField] private GameObject attackProjectile, rockToCreate;
-  [SerializeField] private Transform creatingPointTransform ;
+  [SerializeField] private Transform creatingPointTransform;
   [SerializeField] private Animator animator;
-  private float rockCreateCooldownCount = 0f;
+  public bool isKnockBacked = false;
+  private float rockCreateCooldownCount = 0f, knockBackDurationCount = 0f;
   private Rigidbody2D rb;
   private BoxCollider2D boxCollider2D;
+  private PlayerEnergyController playerEnergyController;
   private bool _isGrounded = true, facingRight = true, _isMoving = false, canCreateRock = true;
   public bool IsGrounded
   {
@@ -43,6 +46,7 @@ public class PlayerController : MonoBehaviour
   {
     rb = GetComponent<Rigidbody2D>();
     boxCollider2D = GetComponent<BoxCollider2D>();
+    playerEnergyController = GetComponent<PlayerEnergyController>();
    
 
   }
@@ -52,6 +56,7 @@ public class PlayerController : MonoBehaviour
     InputController.onInputJump += Jump;
     InputController.onInputShoot += Shoot;
     InputController.onInputCreateRock += CreateRock;
+    HealthDamager.OnPlayerKnockBack += OnKnockBack;
 
   }
   private void OnDisable()
@@ -60,6 +65,7 @@ public class PlayerController : MonoBehaviour
     InputController.onInputJump -= Jump;
     InputController.onInputShoot -= Shoot;
     InputController.onInputCreateRock -= CreateRock;
+    HealthDamager.OnPlayerKnockBack -= OnKnockBack;
   }
   private void Update()
   {
@@ -70,6 +76,16 @@ public class PlayerController : MonoBehaviour
       rockCreateCooldownCount = 0;
     }
     
+    if(isKnockBacked)
+    {
+      knockBackDurationCount += Time.deltaTime;
+      if(knockBackDurationCount >= knockBackDuration)
+      {
+        rb.velocity = Vector2.zero;
+        isKnockBacked = false;
+        knockBackDurationCount = 0;
+      }
+    }
   }
 
   private void FixedUpdate()
@@ -77,31 +93,47 @@ public class PlayerController : MonoBehaviour
     GroundCheck();
   }
 
+  private void OnKnockBack(Vector2 directionalForce)
+  {
+    isKnockBacked = true;
+    rb.velocity = directionalForce;
+   
+  }
+
   private void Move(float axis)
   {
-    if (CanMove)
-    {
-      rb.velocity = new Vector2(axis * moveSpeed, rb.velocity.y);
-      if (axis > 0 && !facingRight)
-      {
-        Flip();
-      }
-      if (axis < 0 && facingRight)
-      {
-        Flip();
-      }
 
-      if (axis == 0)
+    if(isKnockBacked)
+    {
+      return;
+    }
+
+    if (!isKnockBacked)
+    {
+      if (CanMove)
       {
-        IsMoving = false;
+        rb.velocity = new Vector2(axis * moveSpeed, rb.velocity.y);
+        if (axis > 0 && !facingRight)
+        {
+          Flip();
+        }
+        if (axis < 0 && facingRight)
+        {
+          Flip();
+        }
+
+        if (axis == 0)
+        {
+          IsMoving = false;
+        }
+        else
+        {
+          IsMoving = true;
+        }
       }
       else
-      {
-        IsMoving = true;
-      }
+        rb.velocity = new Vector2(0, rb.velocity.y);
     }
-    else
-      rb.velocity = new Vector2(0, rb.velocity.y);
   }
 
   private void Jump()
@@ -118,8 +150,11 @@ public class PlayerController : MonoBehaviour
 
   private void Shoot()
   {
-    if (IsGrounded)
-     animator.SetTrigger("DistanceAttack");
+    if (IsGrounded && playerEnergyController.CanAttack )
+    {
+      animator.SetTrigger("DistanceAttack");
+      playerEnergyController.ChangeEnergyOnAttack();
+    }
   }
   private void CreateRock()
   {

@@ -4,11 +4,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerHealthController : MonoBehaviour, IHealthController
-{
+{ 
+
+
   private float maxHealh = 8f;
   private float healthOnStartGame = 3f;
   private float currentHealth;
   
+  [SerializeField] private Animator animator;
+  [SerializeField] private float bloodSpawnDistance;
+  [SerializeField] private GameObject blood;
+
+
 
   private void Start()
   {
@@ -34,11 +41,20 @@ public class PlayerHealthController : MonoBehaviour, IHealthController
   {
     
     currentHealth -= damage;
+    gameObject.GetComponent<ParticleSystem>().Play();
+    animator.SetTrigger("Hit");
+    GameObject newBlood = Instantiate(blood, transform.position + Vector3.down * bloodSpawnDistance, blood.transform.rotation);
+    newBlood.transform.localScale = gameObject.transform.localScale;
     UIPlayerHealth.OnTakeDamage.Invoke((int)damage);
     if (currentHealth <= 0)
     {
-      Death();
+      GetComponent<Collider2D>().enabled = false;
+      GetComponent<PlayerController>().enabled = false;
+      GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+      animator.SetTrigger("Death");
     }
+    
+   
   }
 
   private void Death()
