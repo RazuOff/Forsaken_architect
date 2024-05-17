@@ -57,10 +57,6 @@ public class PlayerHealthController : MonoBehaviour, IHealthController
    
   }
 
-  //private void Death()
-  //{
-  //  Destroy(gameObject);
-  //}
 
   
 

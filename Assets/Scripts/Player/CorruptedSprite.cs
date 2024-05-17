@@ -16,7 +16,7 @@ public class CorruptedSprite : MonoBehaviour
   {
 
     yield return new WaitForSeconds(1.5f);
-    UIController.instance.LosePanelOpen();
+    UIController.instance.LoseSceneLoad();
 
     Destroy(player);
     

@@ -176,21 +176,16 @@ public class PlayerController : MonoBehaviour
   private void GroundCheck()
   {
     RaycastHit2D raycastHit = Physics2D.BoxCast(boxCollider2D.bounds.center, boxCollider2D.bounds.size - new Vector3(0.1f, 0f, 0f), 0f, Vector2.down, heightOfCheckForJump, platformLayerMask);
-    Color color;
     if (raycastHit.collider != null)
     {
-      IsGrounded = true;
-      color = Color.green;
+      IsGrounded = true;      
     }
     else
     {
-      IsGrounded = false;
-      color = Color.red;
+      IsGrounded = false;     
     }
 
-    Debug.DrawRay(boxCollider2D.bounds.center + new Vector3(boxCollider2D.bounds.extents.x, 0), Vector2.down * (boxCollider2D.bounds.extents.y + heightOfCheckForJump), color);
-    Debug.DrawRay(boxCollider2D.bounds.center - new Vector3(boxCollider2D.bounds.extents.x, 0), Vector2.down * (boxCollider2D.bounds.extents.y + heightOfCheckForJump), color);
-    Debug.DrawRay(boxCollider2D.bounds.center - new Vector3(boxCollider2D.bounds.extents.x, boxCollider2D.bounds.extents.y + heightOfCheckForJump), Vector2.right * (boxCollider2D.bounds.extents.x * 2f), color);
+   
   }
 
 }

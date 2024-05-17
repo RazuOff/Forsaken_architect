@@ -12,8 +12,8 @@ public class UIController : MonoBehaviour
   [SerializeField] private InputController inputController;
   [SerializeField] private Slider energySlider;
   [SerializeField] private TMP_Text scoreText;
-  [SerializeField] private GameObject pausePanel, winPanel, losePanel;
-  [SerializeField] private TMP_Text scoreTextWin, scoreTextLose;
+  [SerializeField] private GameObject pausePanel;
+  [SerializeField] private string winScene, loseScene;
   private int score = 0;
   public static UIController instance;
 
@@ -31,27 +31,18 @@ public class UIController : MonoBehaviour
   {
     InputController.OnInputMenu -= PausePanelOpen;
   }
-  public void LosePanelOpen()
+  public void LoseSceneLoad()
   {
 
-
-    Time.timeScale = 0f;
-    losePanel.SetActive(true);
-    scoreTextLose.text = "score: " + score.ToString("0");
-    inputController.isActive = false;
-
+    PlayerPrefs.SetInt("Score", score);
+    SceneManager.LoadScene(loseScene);
 
   }
 
-  public void WinPanelOpen()
+  public void WinSceneLoad()
   {
-
-    Time.timeScale = 0f;
-    winPanel.SetActive(true);
-    scoreTextWin.text = "score: " + score.ToString("0");
-    inputController.isActive = false;
-
-
+    PlayerPrefs.SetInt("Score", score);
+    SceneManager.LoadScene(winScene);
 
   }
 

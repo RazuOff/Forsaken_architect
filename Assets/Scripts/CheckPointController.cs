@@ -24,7 +24,7 @@ public class CheckPointController : MonoBehaviour
   {
     yield return new WaitForSeconds(2f);
 
-    UIController.instance.WinPanelOpen();
+    UIController.instance.WinSceneLoad();
   }
 
 
