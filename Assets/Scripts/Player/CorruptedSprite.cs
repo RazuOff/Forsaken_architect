@@ -12,9 +12,14 @@ public class CorruptedSprite : MonoBehaviour
     playerAttack.SpawnProjectile();
   }
 
-  public void OnDeath()
+  public IEnumerator OnDeath()
   {
+
+    yield return new WaitForSeconds(1.5f);
+    UIController.instance.LosePanelOpen();
+
     Destroy(player);
+    
   }
 
 }

@@ -40,15 +40,14 @@ public class UIPlayerHealth : MonoBehaviour
 
   private void HealthTakeDamage(int damage)
   {
-
+    if (damage !=0)
     for (int i = currentHealth - 1; i >= currentHealth - damage; i--)
     {
-      if(i >= 0) 
+      if(i < 0) 
       {       
         break; 
       }
       healthList[i].GetComponent<Animator>().SetTrigger("Destroy");
-      
     }
     currentHealth -= damage;
 

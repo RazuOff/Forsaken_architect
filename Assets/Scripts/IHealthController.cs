@@ -5,8 +5,8 @@ using UnityEngine;
 public interface IHealthController
 {
 
-  void TakeDamage(float damage);
-  void Heal(float healAmount);
+  void TakeDamage(int damage);
+  void Heal(int healAmount);
 
 
 }

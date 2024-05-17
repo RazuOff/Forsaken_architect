@@ -4,19 +4,19 @@ using UnityEngine;
 
 public class EnemyHealthController : MonoBehaviour, IHealthController
 {
-  [SerializeField] private float health;
+  [SerializeField] private int health;
   private Animator animator;
   [SerializeField] private float scoreCost;
   private void Awake()
   {
     animator = GetComponent<Animator>();
   }
-  public void Heal(float healAmount)
+  public void Heal(int healAmount)
   {
     
   }
 
-  public void TakeDamage(float damage)
+  public void TakeDamage(int damage)
   {
     health -= damage;
     animator.SetTrigger("Hit");

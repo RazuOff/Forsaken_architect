@@ -52,19 +52,19 @@ public class PlayerController : MonoBehaviour
   }
   private void OnEnable()
   {
-    InputController.onInputMove += Move;
-    InputController.onInputJump += Jump;
-    InputController.onInputShoot += Shoot;
-    InputController.onInputCreateRock += CreateRock;
+    InputController.OnInputMove += Move;
+    InputController.OnInputJump += Jump;
+    InputController.OnInputShoot += Shoot;
+    InputController.OnInputCreateRock += CreateRock;
     HealthDamager.OnPlayerKnockBack += OnKnockBack;
 
   }
   private void OnDisable()
   {
-    InputController.onInputMove -= Move;
-    InputController.onInputJump -= Jump;
-    InputController.onInputShoot -= Shoot;
-    InputController.onInputCreateRock -= CreateRock;
+    InputController.OnInputMove -= Move;
+    InputController.OnInputJump -= Jump;
+    InputController.OnInputShoot -= Shoot;
+    InputController.OnInputCreateRock -= CreateRock;
     HealthDamager.OnPlayerKnockBack -= OnKnockBack;
   }
   private void Update()

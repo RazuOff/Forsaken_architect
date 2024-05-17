@@ -10,7 +10,7 @@ public class RangeEnemy : EnemyController
   [SerializeField] private float bulletSpeed;
   [SerializeField] private LayerMask hidePlayerMask;
   [SerializeField] private GameObject player;
-  private bool canHitPlayer = false;
+  private bool canHitPlayer = false, playerTooClose = false;
 
 
 
@@ -19,7 +19,7 @@ public class RangeEnemy : EnemyController
   {
     base.FixedUpdate();
     
-    if (canHitPlayer)
+    if (canHitPlayer )
     {
       if(player.transform.position.x > transform.position.x)
       {
@@ -34,9 +34,13 @@ public class RangeEnemy : EnemyController
         {
           ChangeDirection();
         }
-      }      
-      base.Attack();
+      }
+      if (!playerTooClose)
+        base.Attack();
+      else
+        ChangeDirection();
     }
+    
   }
 
   public override void Attack()
@@ -59,6 +63,17 @@ public class RangeEnemy : EnemyController
   {
     canHitPlayer = false;
     animator.SetBool("CanMove", true);
+  }
+  public void OnPlayerTooClose()
+  {
+    playerTooClose = true;      
+    animator.SetBool("CanMove", true);
+    
+  }
+  public void OnPlayerExitCloseZone()
+  {   
+    playerTooClose = false;     
+
   }
 
   public void OnShoot()

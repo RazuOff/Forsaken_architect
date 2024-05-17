@@ -7,9 +7,9 @@ public class PlayerHealthController : MonoBehaviour, IHealthController
 { 
 
 
-  private float maxHealh = 8f;
-  private float healthOnStartGame = 3f;
-  private float currentHealth;
+  private int maxHealh = 8;
+  private int healthOnStartGame = 3;
+  private int currentHealth;
   
   [SerializeField] private Animator animator;
   [SerializeField] private float bloodSpawnDistance;
@@ -28,7 +28,7 @@ public class PlayerHealthController : MonoBehaviour, IHealthController
     UIPlayerHealth.OnSetupUI.Invoke((int)healthOnStartGame);
   }
 
-  public void Heal(float healAmount)
+  public void Heal(int healAmount)
   {
     if (currentHealth < maxHealh)
     {
@@ -37,15 +37,15 @@ public class PlayerHealthController : MonoBehaviour, IHealthController
     }
   }
 
-  public void TakeDamage(float damage)
+  public void TakeDamage(int damage)
   {
     
-    currentHealth -= damage;
+    currentHealth -= damage;    
+    UIPlayerHealth.OnTakeDamage.Invoke(damage);
     gameObject.GetComponent<ParticleSystem>().Play();
     animator.SetTrigger("Hit");
     GameObject newBlood = Instantiate(blood, transform.position + Vector3.down * bloodSpawnDistance, blood.transform.rotation);
-    newBlood.transform.localScale = gameObject.transform.localScale;
-    UIPlayerHealth.OnTakeDamage.Invoke((int)damage);
+    newBlood.transform.localScale = gameObject.transform.localScale;    
     if (currentHealth <= 0)
     {
       GetComponent<Collider2D>().enabled = false;
@@ -57,10 +57,10 @@ public class PlayerHealthController : MonoBehaviour, IHealthController
    
   }
 
-  private void Death()
-  {
-    Destroy(gameObject);
-  }
+  //private void Death()
+  //{
+  //  Destroy(gameObject);
+  //}
 
   
 

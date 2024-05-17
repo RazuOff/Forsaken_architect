@@ -6,6 +6,7 @@ public class CreatedRock : MonoBehaviour
 {
 
   [SerializeField] private float duration = 2f;
+  [SerializeField] private GameObject destroyParticle;
   private float durationCount = 0f;
   // Start is called before the first frame update
   void Start()
@@ -26,6 +27,7 @@ public class CreatedRock : MonoBehaviour
 
   private void RockDestroy()
   {
+    Instantiate(destroyParticle,transform.position, destroyParticle.transform.rotation);
     Destroy(gameObject);
   }
 }

@@ -7,8 +7,12 @@ public class InputController : MonoBehaviour
 {
   private bool[] stickDownLast;
 
-  public static Action<float> onInputMove;
-  public static Action onInputJump, onInputShoot, onInputCreateRock;
+  public bool isActive = true;
+
+  public static Action<float> OnInputMove;
+  public static Action OnInputJump, OnInputShoot, OnInputCreateRock, OnInputMenu;
+
+  
  
 
 
@@ -18,16 +22,30 @@ public class InputController : MonoBehaviour
   }
   void FixedUpdate()
   {
-    MovementInput();
-    JumpInput();
+    if (isActive)
+    {
+      MovementInput();
+      JumpInput();
+    }
     
     
   }
 
   private void Update()
   {
-    ShootInput();
-    CreateRockInput();
+    if (isActive)
+    {
+      ShootInput();
+      CreateRockInput();
+    }
+      Menu();
+    
+  }
+
+  private void Menu()
+  {
+    if (Input.GetKeyDown(KeyCode.Escape))
+      OnInputMenu?.Invoke();
   }
 
   private void JumpInput()
@@ -36,7 +54,7 @@ public class InputController : MonoBehaviour
     {
       if (!stickDownLast[1])
       {
-        onInputJump?.Invoke();
+        OnInputJump?.Invoke();
         stickDownLast[1] = true;
       }
     }
@@ -49,13 +67,13 @@ public class InputController : MonoBehaviour
   private void MovementInput()
   {
     float axis = Input.GetAxisRaw("Horizontal");
-    onInputMove?.Invoke(axis);
+    OnInputMove?.Invoke(axis);
   }
   private void CreateRockInput()
   {
     if (Input.GetKeyDown(KeyCode.E))
     {
-      onInputCreateRock.Invoke();
+      OnInputCreateRock.Invoke();
     }
   }
   private void ShootInput()
@@ -64,7 +82,7 @@ public class InputController : MonoBehaviour
     {
       if (!stickDownLast[0])
       {
-        onInputShoot?.Invoke();
+        OnInputShoot?.Invoke();
         stickDownLast[0] = true;
       }
 

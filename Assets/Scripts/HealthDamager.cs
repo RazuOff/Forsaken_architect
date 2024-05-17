@@ -8,7 +8,7 @@ public class HealthDamager : MonoBehaviour
 {
 
   [SerializeField] private bool isTrigger;
-  [SerializeField] private float damage;
+  [SerializeField] private int damage;
   [SerializeField] private bool knockBack;
   [SerializeField] private float knockBackForce;
 
