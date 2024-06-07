@@ -1,11 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Animations;
+
 using UnityEngine;
 
 public class UIHealthPoint : MonoBehaviour
 {
-   public AnimatorController controller;
+   public RuntimeAnimatorController controller;
 
   private void Awake()
   {

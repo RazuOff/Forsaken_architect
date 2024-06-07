@@ -133,6 +133,21 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1259953270131567851, guid: 81e51c923e6cb6346932c191f0ec1a03, type: 3}
   m_PrefabInstance: {fileID: 7758496904764891270}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6010457
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6010433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 254b65f4ba79013449e1261031614e5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 1867884386}
+  bloodSpawnDistance: 0.65
+  blood: {fileID: 74117387971922752, guid: 589c6565e8512564aa386353347f1bbf, type: 3}
 --- !u!1 &16253519
 GameObject:
   m_ObjectHideFlags: 0
@@ -1287,10 +1302,10 @@ RectTransform:
   - {fileID: 2145015060}
   m_Father: {fileID: 1052967961}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 16, y: -246.17175}
-  m_SizeDelta: {x: 495.0997, y: 143.8558}
+  m_AnchorMin: {x: 0.5, y: 0.32686386}
+  m_AnchorMax: {x: 0.5, y: 0.32686386}
+  m_AnchoredPosition: {x: 16, y: -87.17175}
+  m_SizeDelta: {x: 495.09973, y: 143.85583}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &168348516
 MonoBehaviour:
@@ -1502,9 +1517,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1052967961}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 283}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -152}
   m_SizeDelta: {x: 694.3523, y: 156.7381}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &219051834
@@ -3746,10 +3761,10 @@ RectTransform:
   - {fileID: 1769114283}
   m_Father: {fileID: 1052967961}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 16, y: 89.49173}
-  m_SizeDelta: {x: 495.0997, y: 143.8558}
+  m_AnchorMin: {x: 0.5, y: 0.7411728}
+  m_AnchorMax: {x: 0.5, y: 0.7411728}
+  m_AnchoredPosition: {x: 16, y: -132.50827}
+  m_SizeDelta: {x: 495.09973, y: 143.85583}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &627904319
 MonoBehaviour:
@@ -5994,10 +6009,10 @@ RectTransform:
   - {fileID: 219051833}
   m_Father: {fileID: 1871815537}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: -28}
-  m_SizeDelta: {x: -646.3619, y: -159.51}
+  m_SizeDelta: {x: 1273.6382, y: -159.51001}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1052967962
 MonoBehaviour:
@@ -6470,10 +6485,10 @@ RectTransform:
   - {fileID: 988031539}
   m_Father: {fileID: 1052967961}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 16, y: -85}
-  m_SizeDelta: {x: 495.0997, y: 143.8558}
+  m_AnchorMin: {x: 0.5, y: 0.51734555}
+  m_AnchorMax: {x: 0.5, y: 0.51734555}
+  m_AnchoredPosition: {x: 16, y: -101}
+  m_SizeDelta: {x: 495.09973, y: 143.85583}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1152200163
 MonoBehaviour:
@@ -11153,6 +11168,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1851918752}
   m_CullTransparentMesh: 1
+--- !u!95 &1867884386 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 6225702045661098911, guid: 81e51c923e6cb6346932c191f0ec1a03, type: 3}
+  m_PrefabInstance: {fileID: 7758496904764891270}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1871815533
 GameObject:
   m_ObjectHideFlags: 0
@@ -12786,7 +12806,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 450744944947058410, guid: 81e51c923e6cb6346932c191f0ec1a03, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6010457}
   m_SourcePrefab: {fileID: 100100000, guid: 81e51c923e6cb6346932c191f0ec1a03, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
