@@ -2,19 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class EnemyController : MonoBehaviour
+public abstract class EnemyController : MonoBehaviour, IKnockBackable
 {
   [SerializeField] private ContactFilter2D castFilter;
   [SerializeField] private float groundDistance = .5f;
-  
   [SerializeField] private float movementSpeed;
+  [SerializeField] private float knockBackDuration;
+
+
+  protected GameObject player;
 
   protected Animator animator;
   private RaycastHit2D[] groundHits = new RaycastHit2D[5];
   private CapsuleCollider2D capsuleCollider;
-  protected float direction = -1f;
-
+  protected float direction = -1f, knockBackDurationCount = 0f;
+  private bool isKnockBacked = false;
   private Rigidbody2D rb;
+
   private bool _isMoving;
   public bool IsMoving
   {
@@ -52,16 +56,39 @@ public abstract class EnemyController : MonoBehaviour
     rb = GetComponent<Rigidbody2D>();
     capsuleCollider = GetComponent<CapsuleCollider2D>();
     animator = GetComponent<Animator>();
+    player = GameObject.FindGameObjectWithTag("Player");
   }
-  
+  private void Update()
+  {
+    if (isKnockBacked)
+    {
+      knockBackDurationCount += Time.deltaTime;
+      if (knockBackDurationCount >= knockBackDuration)
+      {
+        isKnockBacked = false;
+        rb.velocity = Vector2.zero;
+        knockBackDurationCount = 0f;
+      }
+    }
+  }
+
   protected virtual void FixedUpdate()
   {
     Movement();
     IsGrounded = capsuleCollider.Cast(Vector2.down, castFilter, groundHits, groundDistance) > 0;
+
   }
+
+
 
   protected void Movement()
   {
+    if (isKnockBacked)
+    {
+      return;
+    }
+
+
     if (IsGrounded && CanMove)
     {
       rb.velocity = new Vector2(movementSpeed * direction, rb.velocity.y);
@@ -75,6 +102,7 @@ public abstract class EnemyController : MonoBehaviour
         rb.velocity = new Vector2(0, rb.velocity.y);
       }
     }
+
   }
   public virtual void Attack()
   {
@@ -101,5 +129,10 @@ public abstract class EnemyController : MonoBehaviour
 
   }
 
-
+  public void OnKnockBack(Vector2 damagerPos, Vector2 toDealDamagePos, float knockBackForce)
+  {
+    isKnockBacked = true;
+    Vector2 dirctionToKnockBack = (toDealDamagePos - damagerPos).normalized;
+    rb.velocity = dirctionToKnockBack * knockBackForce;
+  }
 }

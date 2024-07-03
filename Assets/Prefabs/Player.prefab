@@ -13,11 +13,13 @@ GameObject:
   - component: {fileID: 8775420828813220505}
   - component: {fileID: 1366636225692837214}
   - component: {fileID: 3178112676268005036}
-  - component: {fileID: 3306212102700688980}
   - component: {fileID: 8861242454591785587}
   - component: {fileID: 3461414522610999534}
   - component: {fileID: 6956865663768369922}
   - component: {fileID: 663520377960667140}
+  - component: {fileID: 4111319395582751184}
+  - component: {fileID: 8587528294668961699}
+  - component: {fileID: 7697187062530787789}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -40,7 +42,6 @@ Transform:
   m_Children:
   - {fileID: 6386672180750219524}
   - {fileID: 6748525526695441119}
-  - {fileID: 2801586940268749959}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &6301734310030423541
@@ -75,7 +76,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.21875, y: 0.38418937}
+  m_Offset: {x: -0.08822262, y: 0.13849133}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.6, y: -0.3902439}
@@ -86,7 +87,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2.1875, y: 2.6233687}
+  m_Size: {x: 1.250777, y: 2.1319728}
   m_EdgeRadius: 0
 --- !u!50 &8775420828813220505
 Rigidbody2D:
@@ -113,7 +114,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!114 &1366636225692837214
 MonoBehaviour:
@@ -127,19 +128,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c142f0f8b7044a64c9b88afb03f45525, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 6225702045661098911}
   platformLayerMask:
     serializedVersion: 2
     m_Bits: 4160
   jumpForce: 6
   moveSpeed: 5
   rockCreateCooldown: 2
+  rockSpawnRange: 1.5
   heightOfCheckForJump: 0.1
   knockBackDuration: 0.1
   attackProjectile: {fileID: 5215705531965584905, guid: b6a28b384023dfe47b5d62dd2113fcf1, type: 3}
-  rockToCreate: {fileID: 5247648659451710075, guid: 6d4d4809529c76a4c9c4e99b0a3a410c, type: 3}
-  creatingPointTransform: {fileID: 2801586940268749959}
-  animator: {fileID: 6225702045661098911}
-  isKnockBacked: 0
 --- !u!114 &3178112676268005036
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -152,23 +151,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2826c5fb48945b241afb3d75e976ab68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 6225702045661098911}
-  bloodSpawnDistance: 0.65
-  blood: {fileID: 74117387971922752, guid: 589c6565e8512564aa386353347f1bbf, type: 3}
---- !u!114 &3306212102700688980
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 450744944947058410}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac53d63a5ddefcc468b08512ce0da109, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  projectile: {fileID: 5215705531965584905, guid: b6a28b384023dfe47b5d62dd2113fcf1, type: 3}
-  spawnTransform: {fileID: 6386672180750219524}
 --- !u!114 &8861242454591785587
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5053,7 +5035,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxEnergy: 100
-  regenegatePerSecond: 2
+  regenegatePerSecond: 7
   attackCost: 5
   OnEnergyChange:
     m_PersistentCalls:
@@ -5070,6 +5052,51 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &4111319395582751184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 450744944947058410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 254b65f4ba79013449e1261031614e5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 6225702045661098911}
+  bloodSpawnDistance: 0.65
+  blood: {fileID: 74117387971922752, guid: 589c6565e8512564aa386353347f1bbf, type: 3}
+--- !u!114 &8587528294668961699
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 450744944947058410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 949ad523bb41e4f418f80a955cce018e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  availablePerks:
+  - {fileID: 11400000, guid: 758278884888a804a89485097551c25d, type: 2}
+  - {fileID: 11400000, guid: abad750c5660c3c459a0992139249167, type: 2}
+--- !u!114 &7697187062530787789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 450744944947058410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52f9aed96162dcc458610f24807d8fb4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  availablePerks:
+  - {fileID: 11400000, guid: b0611e8a7697ef54297ca5074a561888, type: 2}
+  - {fileID: 11400000, guid: d5c977f6be7312b468095bb53cbc6f45, type: 2}
 --- !u!1 &472464534132036637
 GameObject:
   m_ObjectHideFlags: 0
@@ -5189,7 +5216,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 860ee39c534325248b126975463d19a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerAttack: {fileID: 3306212102700688980}
   player: {fileID: 450744944947058410}
 --- !u!1 &1591680034380109654
 GameObject:
@@ -5217,37 +5243,6 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1.47, y: 0.28, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1259953270131567851}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &8990857445731572351
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2801586940268749959}
-  m_Layer: 7
-  m_Name: RockCreationPos
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2801586940268749959
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8990857445731572351}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.59, y: 0.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

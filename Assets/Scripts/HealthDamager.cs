@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -13,7 +14,7 @@ public class HealthDamager : MonoBehaviour
   [SerializeField] private float knockBackForce;
 
 
-  public static Action<Vector2> OnPlayerKnockBack;
+  //public static Action<Vector2> OnPlayerKnockBack;
   private void Awake()
   {
     
@@ -40,16 +41,13 @@ public class HealthDamager : MonoBehaviour
   {
     if (objectToDealDamage.TryGetComponent(out IHealthController healthController))
     {
-      if (knockBack && objectToDealDamage.CompareTag("Player"))
-      {        
-
-        Vector2 damagerPos = transform.position;
-        Vector2 toDealDamagePos = objectToDealDamage.transform.position;
-        Vector2 dirctionToKnockBack = (  toDealDamagePos - damagerPos).normalized;
-        OnPlayerKnockBack.Invoke(dirctionToKnockBack * knockBackForce);
+      if (knockBack && objectToDealDamage.TryGetComponent(out IKnockBackable unitController))
+      {     
+        unitController.OnKnockBack(transform.position, objectToDealDamage.transform.position, knockBackForce);
       }
 
       healthController.TakeDamage(damage);
     }
   }
 }
+

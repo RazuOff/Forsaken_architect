@@ -5,10 +5,9 @@ using UnityEngine;
 public class CloseEnemy : EnemyController
 {
 
-  [SerializeField] private GameObject player;
+  
   [SerializeField] private LayerMask hidePlayerMask;
   [SerializeField] private GameObject attack;
-
 
 
   private bool SeeEnemy()

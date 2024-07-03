@@ -33,4 +33,8 @@ public class PlayerStatusController : MonoBehaviour
     GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
     animator.SetTrigger("Death");
   }
+  private void PlayerKnockBacked()
+  {
+
+  }
 }

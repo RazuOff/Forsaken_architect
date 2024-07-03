@@ -1,34 +1,35 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class InputController : MonoBehaviour
 {
   private bool[] stickDownLast;
 
-  public bool isActive = true;
+  public bool isActive = true, isMovementActive = true, isJumpActive = true;
 
   public static Action<float> OnInputMove;
-  public static Action OnInputJump, OnInputShoot, OnInputCreateRock, OnInputMenu;
+  public static Action OnInputJump, OnInputShoot, OnInputCreateRock, OnInputMenu, OnControllObject, OnReleaseObject, OnPerkMenuOpen;
 
-  
- 
+  public static InputController instance;
+
 
 
   private void Awake()
   {
     stickDownLast = new bool[3];
+    instance = this;
   }
   void FixedUpdate()
   {
     if (isActive)
     {
-      MovementInput();
-      JumpInput();
+      if (isMovementActive)
+        MovementInput();
+      if (isJumpActive)
+        JumpInput();
     }
-    
-    
+
+
   }
 
   private void Update()
@@ -37,9 +38,14 @@ public class InputController : MonoBehaviour
     {
       ShootInput();
       CreateRockInput();
+      ControllMovableObject();
+      ReleaseMovableObject();
     }
-      Menu();
+    Menu();
+    PerksMenu();
     
+
+
   }
 
   private void Menu()
@@ -47,7 +53,11 @@ public class InputController : MonoBehaviour
     if (Input.GetKeyDown(KeyCode.Escape))
       OnInputMenu?.Invoke();
   }
-
+  private void PerksMenu()
+  {
+    if (Input.GetKeyDown(KeyCode.P))
+      OnPerkMenuOpen?.Invoke();
+  }
   private void JumpInput()
   {
     if (Input.GetAxisRaw("Jump") > 0)
@@ -73,7 +83,7 @@ public class InputController : MonoBehaviour
   {
     if (Input.GetKeyDown(KeyCode.E))
     {
-      OnInputCreateRock.Invoke();
+      OnInputCreateRock?.Invoke();
     }
   }
   private void ShootInput()
@@ -90,6 +100,21 @@ public class InputController : MonoBehaviour
     else
     {
       stickDownLast[0] = false;
+    }
+  }
+
+  private void ControllMovableObject()
+  {
+    if (Input.GetMouseButton(1))
+    {
+      OnControllObject?.Invoke();
+    }
+  }
+  private void ReleaseMovableObject()
+  {
+    if (Input.GetMouseButtonUp(1))
+    {
+      OnReleaseObject?.Invoke();
     }
   }
 }

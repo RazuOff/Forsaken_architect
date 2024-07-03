@@ -1,20 +1,33 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
+
 
 public class CorruptedSprite : MonoBehaviour
-{
-  [SerializeField] PlayerBasicDistanceAttack playerAttack;
+{  
   [SerializeField] GameObject player;
-  public void OnAnimatePerformAttack()
+
+  private IWeapon weapon;
+  private Animator animator;
+
+  private void Awake()
   {
-    playerAttack.SpawnProjectile();
+    animator = GetComponent<Animator>();
   }
+  public void OnAnimatePerformAttack()
+  {    
+    weapon = player.GetComponent<AttackPerksController>().currentPerk.weapon;
+    weapon.OnAnimateAttack();
+
+  }
+
+  public void PauseAnimation()
+  {    
+    animator.speed = 0f;  
+  }
+
 
   public IEnumerator OnDeath()
   {
-
     yield return new WaitForSeconds(1.5f);
     UIController.instance.LoseSceneLoad();
 

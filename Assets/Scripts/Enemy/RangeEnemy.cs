@@ -9,11 +9,7 @@ public class RangeEnemy : EnemyController
   [SerializeField] private GameObject bullet;
   [SerializeField] private float bulletSpeed;
   [SerializeField] private LayerMask hidePlayerMask;
-  [SerializeField] private GameObject player;
   private bool canHitPlayer = false, playerTooClose = false;
-
-
-
 
   protected override void FixedUpdate()
   {
@@ -40,7 +36,6 @@ public class RangeEnemy : EnemyController
       else
         ChangeDirection();
     }
-    
   }
 
   public override void Attack()
@@ -78,10 +73,7 @@ public class RangeEnemy : EnemyController
 
   public void OnShoot()
   {
-
     Instantiate(bullet, transform.position, bullet.transform.rotation);
-    
 
   }
-
 }

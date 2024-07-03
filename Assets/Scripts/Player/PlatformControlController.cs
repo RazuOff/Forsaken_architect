@@ -1,56 +1,70 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlatformControlController : MonoBehaviour
 {
   private Rigidbody2D selectedRb;
-  private Vector3 offset, mouseForce, lastPosition, mousePosition;
+  private Vector3 mouseForce, lastPosition, mousePosition;
   [SerializeField] private float maxSpeed;
   [SerializeField] private LayerMask checkObjectMask;
 
 
-  // Start is called before the first frame update
-  private void Awake()
+  private void OnEnable()
   {
-    
+    InputController.OnControllObject += GetMovableObjectOnMouse;
+    InputController.OnReleaseObject += ObjectReleased;
+  }
+  private void OnDisable()
+  {
+    InputController.OnControllObject -= GetMovableObjectOnMouse;
+    InputController.OnReleaseObject -= ObjectReleased;
   }
 
   void FixedUpdate()
   {
-    if (selectedRb != null && Input.GetMouseButton(1))
+    ControllMovable();
+  }
+
+
+  private void GetMovableObjectOnMouse()
+  {
+    mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+    RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity, checkObjectMask);
+    if (hit.rigidbody != null && hit.rigidbody.gameObject.GetComponent<IMovable>() != null)
     {
-      selectedRb.MovePosition(mousePosition + offset);
+      selectedRb = hit.rigidbody;     
+      mouseForce = (mousePosition - lastPosition) / Time.deltaTime;
+      mouseForce = Vector2.ClampMagnitude(mouseForce, maxSpeed);
+      lastPosition = mousePosition;
     }
   }
 
-  void Update()
+  private void ObjectReleased()
   {
-    if (Input.GetMouseButton(1))
+    if (selectedRb != null)
     {
-      mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-      Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-      RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity,checkObjectMask);
-      if (hit.rigidbody != null && hit.collider.gameObject.CompareTag("Movable"))
-      {
-        selectedRb = hit.rigidbody;
-        offset = selectedRb.transform.position - mousePosition;
-        mouseForce = (mousePosition - lastPosition) / Time.deltaTime;
-        mouseForce = Vector2.ClampMagnitude(mouseForce, maxSpeed);
-        lastPosition = mousePosition;
-      }
-      
-    }    
-
-
-    if (Input.GetMouseButtonUp(1) && selectedRb)
-    {
-      Debug.Log(mouseForce);
-      selectedRb.velocity = Vector2.zero;
-      selectedRb.AddForce(mouseForce, ForceMode2D.Impulse);
+      Release();
       selectedRb = null;
     }
-
   }
 
+  private void ControllMovable()
+  {
+    if (selectedRb != null && selectedRb.gameObject.TryGetComponent(out IMovable movableObject))
+    {
+      movableObject.MoveObject(mousePosition);
+    }
+  }
+
+  private void Release()
+  {
+    if (selectedRb.gameObject.TryGetComponent(out IThrowable throwableObject))
+    {
+      throwableObject.ReleaseObject(mouseForce);
+    }
+    if (selectedRb.gameObject.TryGetComponent(out INotThrowable notThrowableObject))
+    {
+      notThrowableObject.ReleaseObject();
+    }
+  }
 }

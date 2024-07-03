@@ -8,11 +8,10 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UIController : MonoBehaviour
-{
-  [SerializeField] private InputController inputController;
+{  
   [SerializeField] private Slider energySlider;
   [SerializeField] private TMP_Text scoreText;
-  [SerializeField] private GameObject pausePanel;
+  [SerializeField] private GameObject pausePanel, perksPanel;
   [SerializeField] private string winScene, loseScene;
   private int score = 0;
   public static UIController instance;
@@ -25,11 +24,15 @@ public class UIController : MonoBehaviour
   private void OnEnable()
   {
     InputController.OnInputMenu += PausePanelOpen;
+    InputController.OnInputMenu += ClosePerksMenu;
+    InputController.OnPerkMenuOpen += OpenPerksMenu;
   }
 
   private void OnDisable()
   {
     InputController.OnInputMenu -= PausePanelOpen;
+    InputController.OnInputMenu -= ClosePerksMenu;
+    InputController.OnPerkMenuOpen -= OpenPerksMenu;
   }
   public void LoseSceneLoad()
   {
@@ -38,7 +41,7 @@ public class UIController : MonoBehaviour
     SceneManager.LoadScene(loseScene);
 
   }
-
+    
   public void WinSceneLoad()
   {
     PlayerPrefs.SetInt("Score", score);
@@ -53,14 +56,14 @@ public class UIController : MonoBehaviour
     {
       Time.timeScale = 1f;
       pausePanel.SetActive(false);
-      inputController.isActive = true;
+      InputController.instance.isActive = true;
 
     }
-    else
+    else if (!perksPanel.activeSelf) 
     {
       Time.timeScale = 0f;
       pausePanel.SetActive(true);
-      inputController.isActive = false;
+      InputController.instance.isActive = false;
 
     }
   }
@@ -68,6 +71,42 @@ public class UIController : MonoBehaviour
   {
     Time.timeScale = 1f;
     SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+  }
+
+  private void OpenPerksMenu()
+  {
+    if (!perksPanel.activeSelf)
+    {
+      Time.timeScale = 0f;
+      perksPanel.SetActive(true);
+      InputController.instance.isActive = false;
+    }
+  }
+
+  private void ClosePerksMenu()
+  {
+    if (perksPanel.activeSelf)
+    {
+      Time.timeScale = 1f;
+      perksPanel.SetActive(false);
+      InputController.instance.isActive = true;
+    }
+  }
+
+  public void OnPerkMenuButton()
+  {
+    if (perksPanel.activeSelf)
+    {
+      Time.timeScale = 1f;
+      perksPanel.SetActive(false);
+      InputController.instance.isActive = true;
+    }
+    else
+    {
+      Time.timeScale = 0f;
+      perksPanel.SetActive(true);
+      InputController.instance.isActive = false;
+    }
   }
   public void OnMainMenu()
   {

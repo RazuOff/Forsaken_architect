@@ -1,20 +1,23 @@
-using System;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IKnockBackable
 {
+  public Animator animator;
   [SerializeField] LayerMask platformLayerMask;
-  [SerializeField] private float jumpForce, moveSpeed, rockCreateCooldown , heightOfCheckForJump = 1f, knockBackDuration;
-  [SerializeField] private GameObject attackProjectile, rockToCreate;
-  [SerializeField] private Transform creatingPointTransform;
-  [SerializeField] private Animator animator;
-  public bool isKnockBacked = false;
+  [SerializeField] private float jumpForce, moveSpeed, rockCreateCooldown, rockSpawnRange, heightOfCheckForJump = 1f, knockBackDuration;
+  [SerializeField] private GameObject attackProjectile;  
+  private CreationPerksController perksController;
+  private AttackPerksController attackPerksController;
+  private bool isKnockBacked = false;
   private float rockCreateCooldownCount = 0f, knockBackDurationCount = 0f;
   private Rigidbody2D rb;
   private BoxCollider2D boxCollider2D;
   private PlayerEnergyController playerEnergyController;
   private bool _isGrounded = true, facingRight = true, _isMoving = false, canCreateRock = true;
+  private GameObject RockToCreate
+  {
+    get { return perksController.currentPerk.prefab; }
+  }
   public bool IsGrounded
   {
     get { return _isGrounded; }
@@ -37,7 +40,7 @@ public class PlayerController : MonoBehaviour
   public bool CanMove
   {
     get
-    {      
+    {
       return animator.GetBool("CanMove");
     }
   }
@@ -47,7 +50,9 @@ public class PlayerController : MonoBehaviour
     rb = GetComponent<Rigidbody2D>();
     boxCollider2D = GetComponent<BoxCollider2D>();
     playerEnergyController = GetComponent<PlayerEnergyController>();
-   
+    perksController = GetComponent<CreationPerksController>();
+    attackPerksController = GetComponent<AttackPerksController>();
+
 
   }
   private void OnEnable()
@@ -56,8 +61,6 @@ public class PlayerController : MonoBehaviour
     InputController.OnInputJump += Jump;
     InputController.OnInputShoot += Shoot;
     InputController.OnInputCreateRock += CreateRock;
-    HealthDamager.OnPlayerKnockBack += OnKnockBack;
-
   }
   private void OnDisable()
   {
@@ -65,21 +68,20 @@ public class PlayerController : MonoBehaviour
     InputController.OnInputJump -= Jump;
     InputController.OnInputShoot -= Shoot;
     InputController.OnInputCreateRock -= CreateRock;
-    HealthDamager.OnPlayerKnockBack -= OnKnockBack;
   }
   private void Update()
   {
     rockCreateCooldownCount += Time.deltaTime;
-    if(rockCreateCooldownCount >= rockCreateCooldown)
+    if (rockCreateCooldownCount >= rockCreateCooldown)
     {
       canCreateRock = true;
       rockCreateCooldownCount = 0;
     }
-    
-    if(isKnockBacked)
+
+    if (isKnockBacked)
     {
       knockBackDurationCount += Time.deltaTime;
-      if(knockBackDurationCount >= knockBackDuration)
+      if (knockBackDurationCount >= knockBackDuration)
       {
         rb.velocity = Vector2.zero;
         isKnockBacked = false;
@@ -93,47 +95,49 @@ public class PlayerController : MonoBehaviour
     GroundCheck();
   }
 
-  private void OnKnockBack(Vector2 directionalForce)
+  public void OnKnockBack(Vector2 damagerPos, Vector2 toDealDamagePos, float knockBackForce)
   {
     isKnockBacked = true;
-    rb.velocity = directionalForce;
-   
+
+    Vector2 dirctionToKnockBack = (toDealDamagePos - damagerPos).normalized;
+    rb.velocity = dirctionToKnockBack * knockBackForce;
   }
 
   private void Move(float axis)
   {
 
-    if(isKnockBacked)
+    if (isKnockBacked)
     {
       return;
     }
 
-    if (!isKnockBacked)
-    {
-      if (CanMove)
-      {
-        rb.velocity = new Vector2(axis * moveSpeed, rb.velocity.y);
-        if (axis > 0 && !facingRight)
-        {
-          Flip();
-        }
-        if (axis < 0 && facingRight)
-        {
-          Flip();
-        }
 
-        if (axis == 0)
-        {
-          IsMoving = false;
-        }
-        else
-        {
-          IsMoving = true;
-        }
+
+    if (CanMove)
+    {
+      rb.velocity = new Vector2(axis * moveSpeed, rb.velocity.y);
+
+      if (axis > 0 && !facingRight)
+      {
+        Flip();
+      }
+      if (axis < 0 && facingRight)
+      {
+        Flip();
+      }
+
+      if (axis == 0)
+      {
+        IsMoving = false;
       }
       else
-        rb.velocity = new Vector2(0, rb.velocity.y);
+      {
+        IsMoving = true;
+      }
     }
+    else
+      rb.velocity = new Vector2(0, rb.velocity.y);
+
   }
 
   private void Jump()
@@ -150,17 +154,22 @@ public class PlayerController : MonoBehaviour
 
   private void Shoot()
   {
-    if (IsGrounded && playerEnergyController.CanAttack )
-    {
-      animator.SetTrigger("DistanceAttack");
-      playerEnergyController.ChangeEnergyOnAttack();
-    }
+    attackPerksController.currentPerk.weapon.Attack();
   }
   private void CreateRock()
   {
     if (canCreateRock)
     {
-      Instantiate(rockToCreate, creatingPointTransform.position, Quaternion.identity);
+      Vector3 spawnPoint = transform.position;
+      if (spawnPoint.x > Camera.main.ScreenToWorldPoint(Input.mousePosition).x)
+      {
+        spawnPoint.x -= rockSpawnRange;
+      }
+      else if (spawnPoint.x < Camera.main.ScreenToWorldPoint(Input.mousePosition).x)
+      {
+        spawnPoint.x += rockSpawnRange;
+      }
+      Instantiate(RockToCreate, spawnPoint, Quaternion.identity);
       canCreateRock = false;
     }
   }
@@ -178,14 +187,12 @@ public class PlayerController : MonoBehaviour
     RaycastHit2D raycastHit = Physics2D.BoxCast(boxCollider2D.bounds.center, boxCollider2D.bounds.size - new Vector3(0.1f, 0f, 0f), 0f, Vector2.down, heightOfCheckForJump, platformLayerMask);
     if (raycastHit.collider != null)
     {
-      IsGrounded = true;      
+      IsGrounded = true;
     }
     else
     {
-      IsGrounded = false;     
+      IsGrounded = false;
     }
-
-   
   }
 
 }
